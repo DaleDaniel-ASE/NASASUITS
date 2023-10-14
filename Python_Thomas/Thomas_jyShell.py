@@ -12,11 +12,12 @@ running = True
 dt = 0 
 
 
-
 #Image Defitions
-
 background =  pg.image.load("Python_Thomas/Mars_back.webp").convert()
-#background = pg.transform.scale(background,(700,467))
+
+xlim = screen.get_width()
+ylim = screen.get_height()
+
 window = pg.image.load("Python_Thomas/Rect.png").convert_alpha()
 slider = pg.image.load("Python_Thomas/slider.png").convert_alpha()
 
@@ -44,15 +45,32 @@ class vitals(object):
        oxy.set_alpha(100)
        oxymeter = pg.transform.scale(slider,(20, (self.oxygen/100)*400))
        oxymeter.set_alpha(100)
-       screen.blit(oxy, (self.x, self.y))
-       screen.blit(oxymeter, (self.x, self.y))
+       olim = oxy.get_height()
+       o2lim = oxymeter.get_height()
+       screen.blit(oxy, (30, 200))
+       screen.blit(oxymeter, (30, 200 + olim - o2lim))
+       
 
        volt = pg.transform.scale(window,(20,400))
        volt.set_alpha(100)
        voltmeter = pg.transform.scale(slider,(20, (self.power/100)*400))
        voltmeter.set_alpha(100)
-       screen.blit(volt, (self.x + 30, self.y))
-       screen.blit(voltmeter, (self.x + 30, self.y))
+       color = (255,0,0)
+       vlim = volt.get_height()
+       v2lim = voltmeter.get_height() 
+       screen.blit(volt, (60, 200))
+       screen.blit(voltmeter, (60, 200 + vlim - v2lim))
+       #pg.draw.rect(screen, color, pg.Rect(60, 200 + vlim - (vlim *(self.power/100), 20, vlim * (self.power/100))))
+            
+       pg.draw.rect(screen, (0,0,0), pg.Rect(90, 200, 20, 300))
+       pg.draw.rect(screen, color, pg.Rect(90, 200 + 300 - (self.power/100), 20,  300 * (self.power/100)))
+
+
+    def tasks(self,screen):
+        task = pg.transform.scale(window,(20,400))
+        task.set_alpha(100)
+        screen.blit(task, (400, 400))
+
 
 class ui(object):
     def __init__(self,x,y):
@@ -71,9 +89,9 @@ def redrawGameWindow():
     pg.display.update()
 
 #Define UI Elements
-
 mapb = map(30, 30)
-vital = vitals(30,200, 30, 50)
+vital = vitals(0,0, 80, 20)
+
 
 ## Main Function
 while running:   
